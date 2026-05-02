@@ -28,6 +28,7 @@ jobs:
           node-version: 22
 
       - name: Install dependencies
+        working-directory: ./tools
         run: npm ci
 
       - name: Create GitHub App token
@@ -39,6 +40,7 @@ jobs:
           owner: ${{ github.repository_owner }}
 
       - name: Sync shared files
+        working-directory: ./tools
         env:
           POLICY_SYNC_TOKEN: ${{ steps.app-token.outputs.token }}
           GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
