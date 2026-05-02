@@ -1,7 +1,7 @@
 import path from "node:path";
 import zod from "zod";
 import fs from "node:fs/promises";
-import { RootDir } from "..";
+import { RootDir } from "../index.mjs";
 
 const targetSchema = zod.object({
   repo: zod.string().regex(/^[a-zA-Z0-9-]+$/),
