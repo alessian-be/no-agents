@@ -1,3 +1,5 @@
+import path from "node:path";
+
 import { readdir, readFile, stat } from "node:fs/promises";
 import { join, relative } from "node:path";
 import { Octokit } from "octokit";
@@ -34,7 +36,9 @@ async function listFilesRecursively(directory: string): Promise<string[]> {
   return files;
 }
 
-const sourceFiles = await listFilesRecursively(Config.source);
+const sourceFiles = await listFilesRecursively(
+  path.join("../../", Config.source),
+);
 
 for (const target of Config.targets) {
   console.log(`Syncing ${owner}/${target.repo}:${target.branch}`);
