@@ -1,7 +1,6 @@
 import path from "node:path";
 import zod from "zod";
 import fs from "node:fs/promises";
-import { RootDir } from "../index.mjs";
 
 const targetSchema = zod.object({
   repo: zod.string().regex(/^[a-zA-Z0-9-]+$/),
@@ -26,6 +25,6 @@ export function validateConfig(configFile: string) {
   return parsed.data;
 }
 
-const configPath = path.join(RootDir, "config.json");
+const configPath = new URL(import.meta.url, "../../config.json");
 const configFile = await fs.readFile(configPath, "utf-8");
 export const Config = validateConfig(JSON.parse(configFile));
