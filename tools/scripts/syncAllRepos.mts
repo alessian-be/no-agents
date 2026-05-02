@@ -4,6 +4,7 @@ import { readdir, readFile, stat } from "node:fs/promises";
 import { join, relative } from "node:path";
 import { Octokit } from "octokit";
 import { Config } from "../types/config.mjs";
+import { RootDir } from "../index.mjs";
 
 const token = process.env.POLICY_SYNC_TOKEN;
 const owner = process.env.GITHUB_REPOSITORY_OWNER;
@@ -37,7 +38,7 @@ async function listFilesRecursively(directory: string): Promise<string[]> {
 }
 
 const sourceFiles = await listFilesRecursively(
-  path.join("../../", Config.source),
+  path.join(RootDir.pathname, Config.source),
 );
 
 for (const target of Config.targets) {
@@ -83,28 +84,28 @@ for (const target of Config.targets) {
     tree,
   });
 
-  const newCommit = await octokit.rest.git.createCommit({
-    owner,
-    repo: target.repo,
-    message: "chore: sync shared policy files",
-    tree: newTree.data.sha,
-    parents: [currentCommitSha],
-    author: {
-      name: "alessian-be-ai-policy-bot",
-      email: "alessian-be-ai-policy-bot@users.noreply.github.com",
-    },
-    committer: {
-      name: "alessian-be-ai-policy-bot",
-      email: "alessian-be-ai-policy-bot@users.noreply.github.com",
-    },
-  });
+  // const newCommit = await octokit.rest.git.createCommit({
+  //   owner,
+  //   repo: target.repo,
+  //   message: "chore: sync shared policy files",
+  //   tree: newTree.data.sha,
+  //   parents: [currentCommitSha],
+  //   author: {
+  //     name: "alessian-be-ai-policy-bot",
+  //     email: "alessian-be-ai-policy-bot@users.noreply.github.com",
+  //   },
+  //   committer: {
+  //     name: "alessian-be-ai-policy-bot",
+  //     email: "alessian-be-ai-policy-bot@users.noreply.github.com",
+  //   },
+  // });
 
-  await octokit.rest.git.updateRef({
-    owner,
-    repo: target.repo,
-    ref: `heads/${target.branch}`,
-    sha: newCommit.data.sha,
-  });
+  // await octokit.rest.git.updateRef({
+  //   owner,
+  //   repo: target.repo,
+  //   ref: `heads/${target.branch}`,
+  //   sha: newCommit.data.sha,
+  // });
 
-  console.log(`Committed ${newCommit.data.sha} to ${target.repo}`);
+  // console.log(`Committed ${newCommit.data.sha} to ${target.repo}`);
 }
