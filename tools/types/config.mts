@@ -15,7 +15,7 @@ const configSchema = zod.object({
 export type TargetSchema = zod.infer<typeof targetSchema>;
 
 export function validateConfig(configFile: string) {
-  const parsed = configSchema.safeParse(path);
+  const parsed = configSchema.safeParse(configFile);
   if (!parsed.success) {
     const errors = parsed.error.issues
       .map((i) => `${i.path.join(".")}: ${i.message}`)
@@ -25,6 +25,6 @@ export function validateConfig(configFile: string) {
   return parsed.data;
 }
 
-const configPath = new URL(import.meta.url, "../../config.json");
+const configPath = new URL("../../config.json", import.meta.url);
 const configFile = await fs.readFile(configPath, "utf-8");
 export const Config = validateConfig(JSON.parse(configFile));
