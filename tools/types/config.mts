@@ -1,4 +1,7 @@
+import path from "node:path";
 import zod from "zod";
+import fs from "node:fs/promises";
+import { RootDir } from "..";
 
 const targetSchema = zod.object({
   repo: zod.string().regex(/^[a-zA-Z0-9-]+$/),
@@ -12,8 +15,8 @@ const configSchema = zod.object({
 
 export type TargetSchema = zod.infer<typeof targetSchema>;
 
-export function validateConfig() {
-  const parsed = configSchema.safeParse(process.env);
+export function validateConfig(configFile: string) {
+  const parsed = configSchema.safeParse(path);
   if (!parsed.success) {
     const errors = parsed.error.issues
       .map((i) => `${i.path.join(".")}: ${i.message}`)
@@ -23,4 +26,6 @@ export function validateConfig() {
   return parsed.data;
 }
 
-export const Config = validateConfig();
+const configPath = path.join(RootDir, "config.json");
+const configFile = await fs.readFile(configPath, "utf-8");
+export const Config = validateConfig(JSON.parse(configFile));
