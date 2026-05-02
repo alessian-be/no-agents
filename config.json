@@ -1,0 +1,25 @@
+{
+  "targets": [
+    {
+      "repo": "alessian-be",
+      "branch": "main"
+    },
+    {
+      "repo": "blog",
+      "branch": "main"
+    },
+    {
+      "repo": "git",
+      "branch": "forgejo"
+    },
+    {
+      "repo": "home",
+      "branch": "main"
+    },
+    {
+      "repo": "portfolio",
+      "branch": "main"
+    }
+  ],
+  "source": "./shared"
+}
