@@ -1,4 +1,4 @@
 import path from "node:path";
 
-export const ToolsDir = path.resolve(__dirname);
+export const ToolsDir = path.resolve(import.meta.url);
 export const RootDir = path.join(ToolsDir, "..");
